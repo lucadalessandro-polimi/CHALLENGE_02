@@ -5,6 +5,8 @@
 #include <map>
 #include <vector>
 #include <array>
+#include <fstream>
+#include <sstream>
 
 namespace algebra{
 
@@ -56,7 +58,7 @@ public:
   void uncompress();
   void print() const;
 
-   SparseMatrix<T, order> readMatrixMarket(const std::string& filename);
+  void readMatrixMarket(const std::string& filename);
 
   inline bool isCompressed() const {
         return compressed;

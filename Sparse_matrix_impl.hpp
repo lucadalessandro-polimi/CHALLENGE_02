@@ -272,8 +272,32 @@ void SparseMatrix<T, order>::print() const {
         }
     }
 
-template <class T,StorageOrder order>
-SparseMatrix<T,order> SparseMatrix<T,order>::readMatrixMarket(const std::string& filename) {
+
+template <class T, StorageOrder order>
+void SparseMatrix<T,order>::readMatrixMarket(const std::string& filename) {
+    std::ifstream in(filename); 
+    std::string line;
+    std::getline(in, line);
+
+    // Ignora i commenti (linee che iniziano con "%")
+    while (line[0] == '%') {
+        std::getline(in, line);
+    }
+
+    std::istringstream first_line(line);
+    std::size_t rows,cols,m_nonZeros;
+    first_line >> rows >> cols >> m_nonZeros; 
+    resize_matrix(rows,cols);
+
+   for (std::size_t k = 0; k < m_nonZeros; ++k) {
+        std::getline(in, line);
+        std::istringstream current_line(line);
+        std::size_t i, j;
+        T value;
+        current_line >> i >> j >> value;
+        std::array<std::size_t, 2> key = {i - 1, j - 1};
+        coo_map[key] = value;
+    }
 }
 
 
