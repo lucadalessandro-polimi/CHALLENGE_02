@@ -40,15 +40,59 @@ public:
        return std::vector(matrix.n_rows,default_value);
     }
     else{
-  
-        for (std::size_t i = 0; i < matrix.n_rows; ++i) {
-               T sum = 0;
-                    
-                for (std::size_t j = 0; j < matrix.n_cols; ++j) {
-                        sum += matrix(i, j) * rhs[j];
+
+        if (order == StorageOrder::row_wise) {
+            if (matrix.isCompressed()) {
+                
+                for (std::size_t i = 0; i < matrix.n_rows; ++i) {
+                  T sum = 0;
+                  std::size_t row_begin = matrix.row_idx[i];
+                  std::size_t row_end = matrix.row_idx[i + 1];
+                      for (std::size_t k = row_begin; k < row_end; ++k) {
+                            std::size_t col = matrix.col_idx[k];
+                            sum += matrix.val[k] * rhs[col];
+                        }
+                      res[i] = sum;
                 }
-                res[i] = sum;
-        }   
+            }
+            else{
+                for (const auto& entry : matrix.coo_map) {
+                   std::size_t row = entry.first[0];
+                   std::size_t col = entry.first[1];
+                   T value = entry.second;
+                   
+                   res[row] += value * rhs[col];
+                }
+            }
+          }
+        
+
+        else{
+            if (matrix.isCompressed()) {
+               
+              for (std::size_t j = 0; j < matrix.n_cols; ++j) {
+                    T col_val = rhs[j];
+                    if (col_val != 0) {
+                        std::size_t col_begin = matrix.col_idx[j];
+                        std::size_t col_end = matrix.col_idx[j + 1];
+                        for (std::size_t k = col_begin; k < col_end; ++k) {
+                            std::size_t row = matrix.row_idx[k];
+                            res[row] += matrix.val[k] * col_val;
+                        }
+                    }
+              }
+               
+            
+           }else{
+                for (const auto& entry : matrix.coo_map) {
+                    std::size_t row = entry.first[0];
+                    std::size_t col = entry.first[1];
+                    T value = entry.second;
+
+                    res[row] += value * rhs[col];
+                }
+           }   
+        }
     
     return res;
     }
