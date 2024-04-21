@@ -27,9 +27,10 @@ void SparseMatrix<T,order>::resize_matrix(std::size_t r, std::size_t c) {
                 ++it;
             }
         }
+    }
         n_rows = r;
         n_cols = c;
-    }
+       
 }
 
 
@@ -287,7 +288,8 @@ void SparseMatrix<T,order>::readMatrixMarket(const std::string& filename) {
     std::istringstream first_line(line);
     std::size_t rows,cols,m_nonZeros;
     first_line >> rows >> cols >> m_nonZeros; 
-    resize_matrix(rows,cols);
+    this->resize_matrix(rows,cols);
+
 
    for (std::size_t k = 0; k < m_nonZeros; ++k) {
         std::getline(in, line);
@@ -298,6 +300,7 @@ void SparseMatrix<T,order>::readMatrixMarket(const std::string& filename) {
         std::array<std::size_t, 2> key = {i - 1, j - 1};
         coo_map[key] = value;
     }
+
 }
 
 

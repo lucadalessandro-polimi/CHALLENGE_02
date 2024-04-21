@@ -2,8 +2,8 @@
 #include <iostream>
 
 int main(){
-/*
-    algebra::SparseMatrix<double,algebra::StorageOrder::column_wise> matrix(4,4);
+
+   /* algebra::SparseMatrix<double,algebra::StorageOrder::column_wise> matrix(4,4);
     matrix(0,0)=4;
     matrix(0,1)=1;
     matrix(1,0)=-1;
@@ -25,12 +25,18 @@ int main(){
 
     for(const auto &val:res)
       std::cout<<val<<std::endl;
+
 */
      algebra::SparseMatrix<double,algebra::StorageOrder::column_wise> mat(0,0);
      mat.readMatrixMarket("lnsp_131.mtx");
-     //mat.compress();
+     mat.compress();
+     std::vector<double> vect(131,1);
+     std::vector<double> res=mat*vect;
 
-     mat.print();
+     for(const auto &val:res)
+      std::cout<<val<<std::endl;
+    
+     
 
 return 0;
 }
