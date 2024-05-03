@@ -76,7 +76,7 @@ template <class T,StorageOrder order>
           if (it == coo_map.end()) 
              return coo_map[{row, col}];
          else 
-            // La coppia di indici esiste già nella mappa, restituisci il valore esistente
+            
             return it->second;
       }
     }
@@ -218,7 +218,7 @@ void SparseMatrix<T, order>::uncompress() {
     } else if (order == StorageOrder::column_wise) {
         for (std::size_t j = 0; j < n_cols; ++j) {
             for (std::size_t i = col_idx[j]; i < col_idx[j + 1]; ++i) {
-                const std::size_t row = row_idx[i]; // In ordine per colonne, invertiamo riga e colonna
+                const std::size_t row = row_idx[i]; 
                 const T value = val[i];
                 coo_map[{row, j}] = value;
             }
@@ -233,45 +233,6 @@ void SparseMatrix<T, order>::uncompress() {
     compressed = false;
 }
 
-template <class T, StorageOrder order>
-void SparseMatrix<T, order>::print() const {
-
-        if (isCompressed()) {
-
-            if(order == StorageOrder::row_wise)
-            std::cout << "Compressed Sparse Row (CSR) format:" << std::endl;
-            else
-            std::cout << "Compressed Sparse Column (CSC) format:" << std::endl;
-            std::cout << "val:";
-            for (const auto& v : val) {
-                std::cout << " " << v;
-            }
-            std::cout << std::endl;
-
-            std::cout << "col_idx:";
-            for (const auto& idx : col_idx) {
-                std::cout << " " << idx;
-            }
-            std::cout << std::endl;
-
-            std::cout << "row_idx:";
-            for (const auto& idx : row_idx) {
-                std::cout << " " << idx;
-            }
-            std::cout << std::endl;
-        } else {
-            std::cout << "Matrix is not compressed. Printing COO format:" << std::endl;
-            if (coo_map.empty()) {
-                std::cout << "NO ENTRIES" << std::endl;
-            } else {
-                for (const auto& pair : coo_map) {
-                    const auto& key = pair.first;
-                    const auto& value = pair.second;
-                    std::cout << "Indices: [" << key[0] << ", " << key[1] << "] - Value: " << value << std::endl;
-                }
-            }
-        }
-    }
 
 
 template <class T, StorageOrder order>
@@ -280,7 +241,7 @@ void SparseMatrix<T,order>::readMatrixMarket(const std::string& filename) {
     std::string line;
     std::getline(in, line);
 
-    // Ignora i commenti (linee che iniziano con "%")
+    
     while (line[0] == '%') {
         std::getline(in, line);
     }
