@@ -1,0 +1,20 @@
+README.md could be improved. Also check your english.
+
+Checklist:
+  - sparse_matrix constructor:   OKAY
+  - comparison operator:         OKAY
+  - compress:                    OKAY
+  - uncompress:                  OKAY
+  - data is properly cleared:    OKAY
+  - call to non-const / const assignment operator: Const operator fails when called.
+  - resize method:               OKAY
+  - operator*:                   OKAY
+  - reading from file:           OKAY
+
+EXTRAs: 
+  - ...
+
+General Comments:
+  - You should put more comments
+  - You shouldn't leave piece of commented codes in the main. Expecially withouth telling what it is about.
+  ( btw, I tested, looks good with complex numbers too: nice job!)
